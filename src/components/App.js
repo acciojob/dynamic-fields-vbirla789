@@ -1,13 +1,63 @@
+import React, { useState } from "react";
+import "./../styles/App.css";
 
-import React from "react";
-import './../styles/App.css';
+function App() {
+  const [formFields, setFormFields] = useState([{ name: "", age: "" }]);
 
-const App = () => {
+  const handleFormChange = (event, index) => {
+    let data = [...formFields];
+    data[index][event.target.name] = event.target.value;
+    setFormFields(data);
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(formFields);
+  };
+
+  const addFields = () => {
+    let object = {
+      name: "",
+      age: "",
+    };
+
+    setFormFields([...formFields, object]);
+  };
+
+  const removeFields = (index) => {
+    let data = [...formFields];
+    data.splice(index, 1);
+    setFormFields(data);
+  };
+
   return (
-    <div>
-        {/* Do not remove the main div */}
+    <div className="App">
+      <form onSubmit={submit}>
+        {formFields.map((form, index) => {
+          return (
+            <div key={index}>
+              <input
+                name="name"
+                placeholder="Name"
+                onChange={(event) => handleFormChange(event, index)}
+                value={form.name}
+              />
+              <input
+                name="age"
+                placeholder="Age"
+                onChange={(event) => handleFormChange(event, index)}
+                value={form.age}
+              />
+              <button onClick={() => removeFields(index)}>Remove</button>
+            </div>
+          );
+        })}
+      </form>
+      <button onClick={addFields}>Add More..</button>
+      <button onClick={submit}>Submit</button>
+      <p>After clicking submit check console for data</p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
